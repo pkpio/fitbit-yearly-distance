@@ -17,7 +17,7 @@ from convertors import *
 
 ########################   PARAMETERS - update to your taste ##########################
 TRACKED_ACTIVITIES = ('Run','Running') # update this for more activity types if required
-START_DATE = "2016-10-01" # Tracking from start of 2017
+START_DATE = "2017-01-01" # Tracking from start of 2017
 ############################### END OF PARAMETERS #######################################
 
 FITBIT_API_URL = 'https://api.fitbit.com/1'
