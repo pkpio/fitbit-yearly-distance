@@ -13,6 +13,8 @@ import time
 from datetime import timedelta, date, datetime
 import json
 
+from convertors import *
+
 ########################   PARAMETERS - update to your taste ##########################
 TRACKED_ACTIVITIES = ('Run','Running') # update this for more activity types if required
 START_DATE = "2016-10-01" # Tracking from start of 2017
@@ -42,10 +44,11 @@ def ReadFromFitbit(api_call, *args, **kwargs):
 	return resp
 
 
-def CummDistanceOfFitbitActivities(start_date='', callurl=None):
+def getInterestedFitbitActivities(dist_data, start_date='', callurl=None):
 	"""
-	Get cummulative distances from activities data starting from a given day from Fitbit
+	Get distances from activities data starting from a given day from Fitbit
 
+	dist_data -- known distance so far (all zeros initially)
 	start_date -- timestamp in yyyy-mm-dd format of the start day
 	callurl -- url to fetch activities from (optional)
 	"""
@@ -56,30 +59,42 @@ def CummDistanceOfFitbitActivities(start_date='', callurl=None):
 	activities_raw = ReadFromFitbit(fitbitClient.make_request, callurl)
 	activities = activities_raw['activities']
 
-	cumm_distance = [];
 	for activity in activities:
 		# Only interested in activities of certain types
 		if activity['activityName'] not in TRACKED_ACTIVITIES: 
 			continue
 
 		# accumulate distance so far
-		day_dist = (activity['startTime'],activity['distance'],activity['distanceUnit'])
-		cumm_distance.append(day_dist);
+		days_since = convertor.daysSinceStart(activity['startTime'][:10])
+		day_km_dist = convertor.distance_in_kms(activity['distance'], activity['distanceUnit'])
+		dist_data[days_since] = day_km_dist
 
 	if activities_raw['pagination']['next'] != '':
-	 	cumm_distance.extend(CummDistanceOfFitbitActivities(callurl=activities_raw['pagination']['next']))
+	 	return getInterestedFitbitActivities(dist_data, callurl=activities_raw['pagination']['next'])
 
-	return cumm_distance
-
+	return dist_data
 
 # Get a fitbit client to make requests
 credentials = json.load(open(fitbitCredsFile))  
 fitbitClient = fitbit.Fitbit(**credentials)
+convertor = Convertor(START_DATE)
 
-# Get cummulative distance and save to file
-cumm_distance = CummDistanceOfFitbitActivities(START_DATE)
-print(cumm_distance)
-json.dump(cumm_distance, open('distance.txt','w'))
+# Init expected steps per day and actual steps to 0 (updated later)
+dist_data = []
+for single_date in convertor.daterange():
+	dist_data.insert( convertor.daysSinceStart(single_date), 0)
+
+# Get distance data in kms for each day since start date
+dist_data = getInterestedFitbitActivities(dist_data, START_DATE)
+
+# find cummulative distances now
+cumm_dist_data = dist_data
+cumm_val = 0
+for i,dist in enumerate(cumm_dist_data):
+	cumm_val += dist
+	cumm_dist_data[i] = cumm_val
+print( "Written {} distance records starting from {}".format(len(cumm_dist_data), START_DATE) )
+json.dump(cumm_dist_data, open('www/distance.json','w'))
 
 # Save updated fitbit credentails
 credentials = json.load(open(fitbitCredsFile)) 
