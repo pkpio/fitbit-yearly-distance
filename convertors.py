@@ -31,6 +31,7 @@ class Convertor:
 
 	def daterange(self, start_date=None, end_date=None, step=1):
 		""" returns a generator that iterates from start_date to end_date. 
+		Start and end dates included.
 
 		step -- number of days to skip between each generated day time stamp.
 		"""
@@ -38,7 +39,7 @@ class Convertor:
 			start_date = self.parseHumanReadableDate(self.start_date)
 		if not end_date:
 			end_date = self.parseHumanReadableDate('today')
-		for n in range(0, int((end_date - start_date).days), step):
+		for n in range(0, int((end_date - start_date).days + 1), step):
 			yield start_date + timedelta(n)
 
 	def distance_in_kms(self, val, unit):
