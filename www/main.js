@@ -21,9 +21,9 @@ angular.module('newYearGoalsApp').controller('MainController', function($scope, 
             target_dists = []
             actual_dists = []
             for (var i = 0; i < raw_data.length; i++) {
-            	label_days.push("Day " + (i+1));
-            	target_dists.push( ((i+1)*1000/365).toFixed(1) );
-            	actual_dists.push( (raw_data[i]).toFixed(1) );
+                label_days.push("Day " + (i+1));
+                target_dists.push( ((i+1)*1000/365).toFixed(1) );
+                actual_dists.push( (raw_data[i]).toFixed(1) );
             }
 
             // show data to scope
