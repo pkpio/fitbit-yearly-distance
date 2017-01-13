@@ -1,6 +1,11 @@
 angular.module('newYearGoalsApp', ['chart.js']);
 
 angular.module('newYearGoalsApp').controller('MainController', function($scope, $http) {
+    // chart options
+    $scope.options = {
+      pointHitDetectionRadius : 1000
+    };
+
 	// Get data
     var req = {
         method: 'GET',
