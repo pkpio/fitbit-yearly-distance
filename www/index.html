@@ -2,13 +2,13 @@
 <html ng-app="newYearGoalsApp">
 <head>
 	<script src="node_modules/angular/angular.min.js"></script>
-	<script src="node_modules/chart.js/dist/Chart.min.js"></script>
-	<script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+	<script src="node_modules/d3/d3.min.js"></script>
+	<script src="node_modules/n3-charts/build/LineChart.js"></script>
 	<script src="main.js"></script>
+
+	<link rel="stylesheet" href="node_modules/n3-charts/build/LineChart.css">
 </head>
 <body ng-controller="MainController">
-	<canvas id="line" class="chart chart-line" chart-data="data"
-		chart-labels="labels" chart-series="series" chart-colors="[ '#46BFBD', '#F7464A']" >
-	</canvas>
+	<linechart data="data" options="options"></linechart>
 </body>
 </html>
