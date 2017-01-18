@@ -8,6 +8,13 @@ angular.module('newYearGoalsApp').controller('MainController', function($scope, 
         },
         tooltips: {
             mode: "x-axis"
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    maxTicksLimit: 20
+                }
+            }]
         }
     };
 
