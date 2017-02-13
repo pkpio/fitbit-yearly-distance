@@ -64,10 +64,10 @@ def getInterestedFitbitActivities(dist_data, start_date='', callurl=None):
 		if activity['activityName'] not in TRACKED_ACTIVITIES: 
 			continue
 
-		# accumulate distance so far
+		# get distance for a particular day since start
 		days_since = convertor.daysSinceStart(activity['startTime'][:10])
 		day_km_dist = convertor.distance_in_kms(activity['distance'], activity['distanceUnit'])
-		dist_data[days_since] = day_km_dist
+		dist_data[days_since] += day_km_dist
 
 	if activities_raw['pagination']['next'] != '':
 	 	return getInterestedFitbitActivities(dist_data, callurl=activities_raw['pagination']['next'])
