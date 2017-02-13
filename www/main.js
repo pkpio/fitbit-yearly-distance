@@ -19,8 +19,7 @@ angular.module('newYearGoalsApp').controller('MainController', function($scope, 
     };
 
     $scope.datasetOverride = [{
-        lineTension: 0,
-        pointHitRadius: 25
+        lineTension: 0
     }]
 
 	// Get data
