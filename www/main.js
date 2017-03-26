@@ -9,6 +9,11 @@ angular.module('newYearGoalsApp').controller('MainController', function($scope, 
         tooltips: {
             mode: "x-axis"
         },
+        elements: {
+            point: { 
+                radius: 0
+            }
+        },
         scales: {
             xAxes: [{
                 ticks: {
